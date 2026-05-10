@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asana 2026: Team Strategy Hub</title>
+    <style>
+        :root {
+            --primary: #3C3489;
+            --primary-light: #EEEDFE;
+            --danger: #E24B4A;
+            --warning: #BA7517;
+            --success: #1D9E75;
+            --bg: #F8F9FB;
+            --border: #E6E8EB;
+        }
+
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: #2D333A; margin: 0; line-height: 1.6; }
+        .container { max-width: 1000px; margin: 40px auto; padding: 0 20px; }
+
+        /* Top Status Bar */
+        .status-bar {
+            background: #FAECE7; border: 1px solid var(--danger); border-radius: 12px;
+            padding: 20px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center;
+        }
+        .days-counter { color: var(--danger); font-weight: 800; font-size: 22px; }
+
+        /* Advanced Calculator Section */
+        .calculator-box {
+            background: white; border: 1px solid var(--border); border-radius: 16px;
+            padding: 25px; margin-bottom: 30px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            display: flex; flex-wrap: wrap; gap: 30px; align-items: center;
+        }
+        .calc-input-group { flex: 1; min-width: 200px; }
+        .calc-input-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px; }
+        .calc-input-group input { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 16px; }
+        
+        .calc-result { background: var(--primary); color: white; padding: 20px 40px; border-radius: 12px; text-align: center; }
+        .result-price { font-size: 32px; font-weight: 800; display: block; }
+        .result-label { font-size: 12px; opacity: 0.8; text-transform: uppercase; }
+
+        /* Navigation Menu (Tabs) */
+        .menu-nav { display: flex; gap: 8px; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 15px; overflow-x: auto; }
+        .menu-item {
+            padding: 10px 20px; border-radius: 8px; border: 1px solid transparent;
+            background: none; cursor: pointer; font-weight: 500; color: #5E6267; white-space: nowrap;
+        }
+        .menu-item.active { background: var(--primary-light); color: var(--primary); border-color: #AFA9EC; }
+
+        /* Tab Content Area */
+        .tab-content { display: none; background: white; padding: 30px; border-radius: 16px; border: 1px solid var(--border); box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
+        .tab-content.active { display: block; }
+
+        /* Styling for Comparison Tables */
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th { text-align: left; font-size: 12px; color: #888; padding: 10px; border-bottom: 2px solid var(--bg); }
+        td { padding: 12px 10px; border-bottom: 1px solid var(--bg); font-size: 14px; }
+        .check { color: var(--success); font-weight: bold; }
+        .cross { color: var(--danger); font-weight: bold; }
+
+        /* Verdict Card */
+        .verdict-card { border-left: 4px solid var(--primary); background: var(--primary-light); padding: 20px; border-radius: 0 12px 12px 0; }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="status-bar">
+        <div>
+            <strong style="font-size: 18px;">⚠️ Team Alert: Upgrade Necessary</strong>
+            <div style="font-size: 14px;">Current project uses <strong>Timeline</strong> & <strong>Custom Fields</strong>. Access will be locked.</div>
+        </div>
+        <div class="days-counter">8 DAYS LEFT</div>
+    </div>
+
+    <div class="calculator-box">
+        <div class="calc-input-group">
+            <label>Team Size</label>
+            <input type="number" id="teamSize" value="8" oninput="updateCost()">
+        </div>
+        <div class="calc-input-group">
+            <label>Billing Cycle</label>
+            <select id="billing" onchange="updateCost()" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--border);">
+                <option value="10.99">Annual ($10.99/user)</option>
+                <option value="13.49">Monthly ($13.49/user)</option>
+            </select>
+        </div>
+        <div class="calc-result">
+            <span class="result-label">Starter Total</span>
+            <span class="result-price" id="totalDisplay">$87.92</span>
+            <span class="result-label">per month</span>
+        </div>
+    </div>
+
+    <div class="menu-nav">
+        <button class="menu-item active" onclick="switchTab(event, 'overview')">Overview</button>
+        <button class="menu-item" onclick="switchTab(event, 'users')">User Limits</button>
+        <button class="menu-item" onclick="switchTab(event, 'locks')">Trial Warning</button>
+        <button class="menu-item" onclick="switchTab(event, 'features')">Feature Comparison</button>
+        <button class="menu-item" onclick="switchTab(event, 'verdict')">Verdict</button>
+    </div>
+
+    <div id="overview" class="tab-content active">
+        <h3>Plan Comparison</h3>
+        <p>Your team has 8 members. Here is how the 2026 pricing tiers look for you:</p>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+            <div style="border: 1px solid var(--border); padding: 15px; border-radius: 10px;">
+                <strong>Personal</strong><br><span style="font-size: 20px;">$0</span><br>Max 2 Users
+            </div>
+            <div style="border: 2px solid var(--primary); padding: 15px; border-radius: 10px; background: var(--primary-light);">
+                <strong>Starter</strong><br><span style="font-size: 20px;">$10.99</span><br>Unlimited Users
+            </div>
+            <div style="border: 1px solid var(--border); padding: 15px; border-radius: 10px;">
+                <strong>Advanced</strong><br><span style="font-size: 20px;">$24.99</span><br>Portfolios & Goals
+            </div>
+        </div>
+    </div>
+
+    <div id="users" class="tab-content">
+        <h3>User Cap Breakdown</h3>
+        <table>
+            <tr><th>Account Type</th><th>Member Limit</th></tr>
+            <tr><td>New Free Accounts</td><td>2 Users (Hard Cap)</td></tr>
+            <tr><td>Legacy Free (Pre-Nov 2025)</td><td>10 Users</td></tr>
+            <tr><td>Starter / Advanced</td><td>Up to 500 Users</td></tr>
+        </table>
+    </div>
+
+    <div id="locks" class="tab-content">
+        <h3 style="color: var(--danger);">The Lockout Warning</h3>
+        <ul>
+            <li><strong>Data is safe:</strong> All tasks and projects stay in Asana.</li>
+            <li><strong>The Lock:</strong> Projects using Timeline, Dependencies, or Custom Fields become "Locked".</li>
+            <li><strong>The Trap:</strong> You cannot open or edit locked tasks until you pay.</li>
+        </ul>
+    </div>
+
+    <div id="features" class="tab-content">
+        <h3>Feature Availability</h3>
+        <table>
+            <tr><th>Feature</th><th>Free</th><th>Starter</th><th>Advanced</th></tr>
+            <tr><td>Timeline View</td><td class="cross">✗</td><td class="check">✓</td><td class="check">✓</td></tr>
+            <tr><td>Custom Fields</td><td class="cross">✗</td><td class="check">✓</td><td class="check">✓</td></tr>
+            <tr><td>Asana AI</td><td class="cross">✗</td><td class="check">✓</td><td class="check">✓</td></tr>
+            <tr><td>Goals / OKRs</td><td class="cross">✗</td><td class="cross">✗</td><td class="check">✓</td></tr>
+            <tr><td>Workload</td><td class="cross">✗</td><td class="cross">✗</td><td class="check">✓</td></tr>
+        </table>
+    </div>
+
+    <div id="verdict" class="tab-content">
+        <div class="verdict-card">
+            <h3>Final Recommendation</h3>
+            <p>For your <strong>Full Stack App Tracker</strong> with 8 people, <strong>Starter is enough</strong>.</p>
+            <p>You only need Advanced if you need Portfolios or Goal tracking. For this project, stick to Starter to keep your Gantt chart and fields active.</p>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    function updateCost() {
+        const size = document.getElementById('teamSize').value;
+        const price = document.getElementById('billing').value;
+        const total = (size * price).toFixed(2);
+        document.getElementById('totalDisplay').innerText = '$' + total;
+    }
+
+    function switchTab(evt, tabName) {
+        const contents = document.querySelectorAll('.tab-content');
+        contents.forEach(c => c.classList.remove('active'));
+        
+        const tabs = document.querySelectorAll('.menu-item');
+        tabs.forEach(t => t.classList.remove('active'));
+        
+        document.getElementById(tabName).classList.add('active');
+        evt.currentTarget.classList.add('active');
+    }
+</script>
+
+</body>
+</html>
